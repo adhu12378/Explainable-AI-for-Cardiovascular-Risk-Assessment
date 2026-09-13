@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CardioAI | Explainable CVD Risk Assessment</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f7fb;
+            color: #1f2937;
+        }
+
+        /* ================= NAVBAR ================= */
+
+        .navbar {
+            height: 70px;
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6%;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: #1d4ed8;
+            color: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .logo h2 {
+            font-size: 19px;
+            color: #111827;
+        }
+
+        .logo span {
+            display: block;
+            font-size: 11px;
+            color: #6b7280;
+            margin-top: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #4b5563;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #1d4ed8;
+        }
+
+        /* ================= HERO ================= */
+
+        .hero {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            color: white;
+            padding: 75px 8%;
+        }
+
+        .hero-content {
+            max-width: 1100px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero h1 {
+            font-size: 44px;
+            line-height: 1.15;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 span {
+            color: #bfdbfe;
+        }
+
+        .hero p {
+            font-size: 17px;
+            line-height: 1.7;
+            color: #e0e7ff;
+            max-width: 650px;
+        }
+
+        .hero-buttons {
+            margin-top: 30px;
+        }
+
+        .primary-btn {
+            display: inline-block;
+            background: white;
+            color: #1e3a8a;
+            padding: 14px 26px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .primary-btn:hover {
+            background: #eff6ff;
+            transform: translateY(-2px);
+        }
+
+        /* ================= HERO CARD ================= */
+
+        .risk-card {
+            background: white;
+            color: #111827;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .risk-card h3 {
+            margin-bottom: 20px;
+            color: #374151;
+            text-align: center;
+        }
+
+        .risk-circle {
+            width: 150px;
+            height: 150px;
+            margin: 10px auto 20px;
+            border-radius: 50%;
+            border: 12px solid #dbeafe;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .risk-circle strong {
+            font-size: 32px;
+            color: #1d4ed8;
+        }
+
+        .risk-circle small {
+            color: #6b7280;
+        }
+
+        .risk-status {
+            text-align: center;
+            padding: 10px;
+            background: #fef3c7;
+            color: #92400e;
+            border-radius: 7px;
+            font-weight: bold;
+        }
+
+        /* ================= FEATURES ================= */
+
+        .section {
+            max-width: 1150px;
+            margin: auto;
+            padding: 65px 25px;
+        }
+
+        .section-heading {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-heading h2 {
+            font-size: 30px;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+
+        .section-heading p {
+            color: #6b7280;
+            max-width: 700px;
+            margin: auto;
+            line-height: 1.6;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 28px;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            transition: 0.2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.07);
+        }
+
+        .feature-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 9px;
+            background: #eff6ff;
+            color: #1d4ed8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 18px;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .feature-card p {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* ================= HOW IT WORKS ================= */
+
+        .process-section {
+            background: #ffffff;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .step {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .step-number {
+            width: 45px;
+            height: 45px;
+            margin: 0 auto 15px;
+            background: #1d4ed8;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .step h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .step p {
+            color: #6b7280;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        /* ================= NOTICE ================= */
+
+        .notice {
+            max-width: 900px;
+            margin: 0 auto 60px;
+            background: #eff6ff;
+            border-left: 5px solid #2563eb;
+            padding: 20px 25px;
+            border-radius: 7px;
+        }
+
+        .notice h3 {
+            margin-bottom: 8px;
+            color: #1e3a8a;
+        }
+
+        .notice p {
+            color: #4b5563;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* ================= FOOTER ================= */
+
+        footer {
+            background: #111827;
+            color: #d1d5db;
+            padding: 35px 8%;
+            text-align: center;
+        }
+
+        footer h3 {
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        footer p {
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 850px) {
+
+            .hero-content {
+                grid-template-columns: 1fr;
+            }
+
+            .features {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .steps {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 35px;
+            }
+        }
+
+        @media (max-width: 550px) {
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            .steps {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                padding: 55px 6%;
+            }
+
+            .hero-buttons a {
+                display: block;
+                width: fit-content;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+<!-- ================= NAVIGATION ================= -->
+
+<nav class="navbar">
+
+    <div class="logo">
+
+        <div class="logo-icon">
+            CVD
+        </div>
+
+        <div>
+
+            <h2>CardioAI</h2>
+
+            <span>
+                Explainable Clinical Decision Support
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="nav-links">
+
+        <a href="{{ url_for('index') }}">
+            Home
+        </a>
+
+        <a href="{{ url_for('predict') }}">
+            Risk Assessment
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- ================= HERO ================= -->
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <div>
+
+            <h1>
+
+                Explainable AI for
+
+                <span>
+                    Cardiovascular Risk Assessment
+                </span>
+
+            </h1>
+
+
+            <p>
+
+                An intelligent Clinical Decision Support Application
+                that predicts cardiovascular disease risk and provides
+                explainable insights into the factors contributing to
+                each prediction using SHAP-based Explainable Artificial
+                Intelligence.
+
+            </p>
+
+
+            <div class="hero-buttons">
+
+                <a
+                    href="{{ url_for('predict') }}"
+                    class="primary-btn"
+                >
+                    Start Risk Assessment
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= RISK PREVIEW ================= -->
+
+        <div class="risk-card">
+
+            <h3>
+                Example Risk Assessment
+            </h3>
+
+
+            <div class="risk-circle">
+
+                <strong>
+                    87%
+                </strong>
+
+                <small>
+                    Probability
+                </small>
+
+            </div>
+
+
+            <div class="risk-status">
+
+                High Cardiovascular Risk
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= FEATURES ================= -->
+
+<section class="section">
+
+    <div class="section-heading">
+
+        <h2>
+            System Capabilities
+        </h2>
+
+        <p>
+
+            The proposed system combines predictive machine learning,
+            explainable AI and clinical decision-support functionality.
+
+        </p>
+
+    </div>
+
+
+    <div class="features">
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                AI
+            </div>
+
+            <h3>
+                Risk Prediction
+            </h3>
+
+            <p>
+
+                Machine learning models analyse patient characteristics
+                to estimate the probability of cardiovascular disease.
+
+            </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                SH
+            </div>
+
+            <h3>
+                SHAP Explainability
+            </h3>
+
+            <p>
+
+                SHAP-based explanations identify the patient
+                characteristics that contribute most strongly
+                to the prediction.
+
+            </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                CF
+            </div>
+
+            <h3>
+                What-If Analysis
+            </h3>
+
+            <p>
+
+                Modify selected patient risk factors and observe
+                how the predicted cardiovascular risk changes.
+
+            </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                RS
+            </div>
+
+            <h3>
+                Risk Stratification
+            </h3>
+
+            <p>
+
+                Patients can be categorised into Low, Moderate,
+                High and Very High cardiovascular risk levels.
+
+            </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                FR
+            </div>
+
+            <h3>
+                Fairness Evaluation
+            </h3>
+
+            <p>
+
+                Model performance can be assessed across demographic
+                groups to identify potential prediction disparities.
+
+            </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                PC
+            </div>
+
+            <h3>
+                Probability Calibration
+            </h3>
+
+            <p>
+
+                Calibration analysis evaluates whether predicted
+                probabilities correspond to observed outcomes.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= HOW IT WORKS ================= -->
+
+<section class="process-section">
+
+    <div class="section">
+
+        <div class="section-heading">
+
+            <h2>
+                How the System Works
+            </h2>
+
+            <p>
+
+                The application follows a structured cardiovascular
+                risk assessment workflow.
+
+            </p>
+
+        </div>
+
+
+        <div class="steps">
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    1
+                </div>
+
+                <h3>
+                    Patient Data
+                </h3>
+
+                <p>
+
+                    Enter demographic, physiological and lifestyle
+                    characteristics.
+
+                </p>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    2
+                </div>
+
+                <h3>
+                    AI Prediction
+                </h3>
+
+                <p>
+
+                    The trained machine learning model calculates
+                    cardiovascular disease probability.
+
+                </p>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    3
+                </div>
+
+                <h3>
+                    SHAP Explanation
+                </h3>
+
+                <p>
+
+                    The system identifies the most influential
+                    factors behind the prediction.
+
+                </p>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    4
+                </div>
+
+                <h3>
+                    Decision Support
+                </h3>
+
+                <p>
+
+                    Risk information and preventive guidance are
+                    presented to support clinical assessment.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= RESEARCH NOTICE ================= -->
+
+<section class="section">
+
+    <div class="notice">
+
+        <h3>
+            Clinical Decision Support Notice
+        </h3>
+
+        <p>
+
+            This application is designed as a research prototype for
+            cardiovascular disease risk assessment. Predictions and
+            recommendations are intended to support, not replace,
+            professional clinical judgement. The system should not be
+            used as a substitute for diagnosis or treatment by a
+            qualified healthcare professional.
+
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <h3>
+        CardioAI
+    </h3>
+
+    <p>
+        SHAP-Enhanced Explainable AI Clinical Decision Support System
+    </p>
+
+    <p>
+        MSc Dissertation Project | CS5500
+    </p>
+
+</footer>
+
+
+</body>
+
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>What-If Analysis</title>
+
+    <style>
+
+        body {
+            font-family: Arial;
+            background: #f4f7fb;
+            margin: 0;
+        }
+
+        header {
+            background: #123b5d;
+            color: white;
+            padding: 25px 50px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: 35px auto;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,.08);
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 6px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            margin-top: 25px;
+            width: 100%;
+            padding: 14px;
+            background: #123b5d;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .result {
+            background: #eff6ff;
+            padding: 25px;
+            border-radius: 10px;
+        }
+
+        .risk {
+            font-size: 25px;
+            font-weight: bold;
+            color: #123b5d;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 20px;
+            background: #123b5d;
+            color: white;
+            text-decoration: none;
+            border-radius: 7px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<header>
+
+    <h1>Counterfactual What-If Analysis</h1>
+
+    <p>
+        Investigate how changes in modifiable risk factors
+        may affect predicted cardiovascular risk.
+    </p>
+
+</header>
+
+
+<div class="container">
+
+    <div class="card">
+
+        <h2>Modify Patient Factors</h2>
+
+        <form method="POST">
+
+            <label>Systolic Blood Pressure</label>
+
+            <input
+                type="number"
+                name="ap_hi"
+                value="{{ patient.ap_hi }}"
+                required
+            >
+
+
+            <label>Diastolic Blood Pressure</label>
+
+            <input
+                type="number"
+                name="ap_lo"
+                value="{{ patient.ap_lo }}"
+                required
+            >
+
+
+            <label>Weight (kg)</label>
+
+            <input
+                type="number"
+                step="0.1"
+                name="weight"
+                value="{{ patient.weight }}"
+                required
+            >
+
+
+            <label>Smoking</label>
+
+            <select name="smoke">
+
+                <option
+                    value="0"
+                    {% if patient.smoke == 0 %}selected{% endif %}
+                >
+                    No
+                </option>
+
+                <option
+                    value="1"
+                    {% if patient.smoke == 1 %}selected{% endif %}
+                >
+                    Yes
+                </option>
+
+            </select>
+
+
+            <label>Physical Activity</label>
+
+            <select name="active">
+
+                <option
+                    value="1"
+                    {% if patient.active == 1 %}selected{% endif %}
+                >
+                    Active
+                </option>
+
+                <option
+                    value="0"
+                    {% if patient.active == 0 %}selected{% endif %}
+                >
+                    Inactive
+                </option>
+
+            </select>
+
+
+            <button type="submit">
+                Recalculate Risk
+            </button>
+
+        </form>
+
+    </div>
+
+
+    {% if result %}
+
+    <div class="card">
+
+        <h2>What-If Result</h2>
+
+        <div class="result">
+
+            <p>
+                Original Risk:
+                <strong>{{ result.original }}%</strong>
+            </p>
+
+            <br>
+
+            <p>
+                New Predicted Risk:
+                <strong>{{ result.new }}%</strong>
+            </p>
+
+            <br>
+
+            <p>
+                Risk Change:
+                <strong>{{ result.change }}%</strong>
+            </p>
+
+            <br>
+
+            <p>
+                New Risk Classification:
+            </p>
+
+            <div class="risk">
+                {{ result.risk_level }}
+            </div>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+
+    <a
+        href="{{ url_for('results') }}"
+        class="btn"
+    >
+        Back to Results
+    </a>
+
+</div>
+
+</body>
+</html>

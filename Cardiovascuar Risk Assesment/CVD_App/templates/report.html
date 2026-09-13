@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Clinical Risk Report</title>
+
+    <style>
+
+        body {
+            font-family: Arial;
+            background: #f4f7fb;
+            margin: 0;
+        }
+
+        header {
+            background: #123b5d;
+            color: white;
+            padding: 25px 50px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 35px auto;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,.08);
+            margin-bottom: 25px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #123b5d;
+            color: white;
+            padding: 13px;
+            text-align: left;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .risk {
+            font-size: 30px;
+            font-weight: bold;
+            color: #123b5d;
+        }
+
+        .download {
+            display: inline-block;
+            background: #166534;
+            color: white;
+            padding: 14px 25px;
+            text-decoration: none;
+            border-radius: 7px;
+            font-weight: bold;
+        }
+
+        .back {
+            display: inline-block;
+            background: #123b5d;
+            color: white;
+            padding: 14px 25px;
+            text-decoration: none;
+            border-radius: 7px;
+            margin-left: 10px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<header>
+
+    <h1>Clinical Risk Assessment Report</h1>
+
+    <p>
+        Explainable AI Cardiovascular Disease Decision Support System
+    </p>
+
+</header>
+
+
+<div class="container">
+
+
+    <!-- RESULT -->
+
+    <div class="card">
+
+        <h2>Risk Assessment</h2>
+
+        <br>
+
+        <p>
+            Predicted Probability
+        </p>
+
+        <div class="risk">
+            {{ probability }}%
+        </div>
+
+        <br>
+
+        <p>
+            Risk Classification:
+            <strong>{{ risk_level }}</strong>
+        </p>
+
+    </div>
+
+
+    <!-- PATIENT -->
+
+    <div class="card">
+
+        <h2>Patient Information</h2>
+
+        <br>
+
+        <table>
+
+            <tr>
+                <th>Parameter</th>
+                <th>Value</th>
+            </tr>
+
+            <tr>
+                <td>Age</td>
+                <td>{{ patient.age_years }} years</td>
+            </tr>
+
+            <tr>
+                <td>Height</td>
+                <td>{{ patient.height }} cm</td>
+            </tr>
+
+            <tr>
+                <td>Weight</td>
+                <td>{{ patient.weight }} kg</td>
+            </tr>
+
+            <tr>
+                <td>Systolic BP</td>
+                <td>{{ patient.ap_hi }} mmHg</td>
+            </tr>
+
+            <tr>
+                <td>Diastolic BP</td>
+                <td>{{ patient.ap_lo }} mmHg</td>
+            </tr>
+
+            <tr>
+                <td>Smoking</td>
+
+                <td>
+                    {% if patient.smoke == 1 %}
+                        Yes
+                    {% else %}
+                        No
+                    {% endif %}
+                </td>
+
+            </tr>
+
+            <tr>
+                <td>Physical Activity</td>
+
+                <td>
+                    {% if patient.active == 1 %}
+                        Active
+                    {% else %}
+                        Inactive
+                    {% endif %}
+                </td>
+
+            </tr>
+
+        </table>
+
+    </div>
+
+
+    <!-- SHAP -->
+
+    <div class="card">
+
+        <h2>Top SHAP Risk Factors</h2>
+
+        <br>
+
+        <table>
+
+            <tr>
+                <th>Feature</th>
+                <th>SHAP Value</th>
+                <th>Impact</th>
+            </tr>
+
+            {% for item in explanation[:10] %}
+
+            <tr>
+
+                <td>
+                    {{ item.feature }}
+                </td>
+
+                <td>
+                    {{ "%.4f"|format(item.shap_value) }}
+                </td>
+
+                <td>
+
+                    {% if item.shap_value > 0 %}
+                        Increases Risk
+                    {% else %}
+                        Reduces Risk
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+    </div>
+
+
+    <!-- ACTIONS -->
+
+    <div class="card">
+
+        <a
+            href="{{ url_for('download_report') }}"
+            class="download"
+        >
+            Download PDF Report
+        </a>
+
+
+        <a
+            href="{{ url_for('results') }}"
+            class="back"
+        >
+            Back to Results
+        </a>
+
+    </div>
+
+
+</div>
+
+</body>
+</html>

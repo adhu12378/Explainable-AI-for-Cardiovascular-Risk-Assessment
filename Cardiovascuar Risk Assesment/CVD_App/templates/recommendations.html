@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Preventive Recommendations</title>
+
+    <style>
+
+        body {
+            font-family: Arial;
+            background: #f4f7fb;
+            margin: 0;
+        }
+
+        header {
+            background: #123b5d;
+            color: white;
+            padding: 25px 50px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 35px auto;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(0,0,0,.07);
+            border-left: 5px solid #123b5d;
+        }
+
+        .card h3 {
+            color: #123b5d;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            line-height: 1.6;
+        }
+
+        .disclaimer {
+            background: #fff7ed;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 25px;
+            line-height: 1.6;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 13px 20px;
+            background: #123b5d;
+            color: white;
+            text-decoration: none;
+            border-radius: 7px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<header>
+
+    <h1>Personalised Preventive Recommendations</h1>
+
+    <p>
+        Risk-factor-based decision support
+    </p>
+
+</header>
+
+
+<div class="container">
+
+    <h2>Recommendations</h2>
+
+    <br>
+
+    {% for item in recommendations %}
+
+    <div class="card">
+
+        <h3>
+            {{ item.title }}
+        </h3>
+
+        <p>
+            {{ item.text }}
+        </p>
+
+    </div>
+
+    {% endfor %}
+
+
+    <div class="disclaimer">
+
+        <strong>Clinical Disclaimer:</strong>
+
+        These recommendations are generated as part of an
+        experimental MSc Clinical Decision Support System.
+        They are intended to support, not replace, professional
+        medical judgement. Patients should consult an appropriately
+        qualified healthcare professional for individual advice.
+
+    </div>
+
+
+    <a
+        href="{{ url_for('results') }}"
+        class="btn"
+    >
+        Back to Results
+    </a>
+
+</div>
+
+</body>
+</html>
