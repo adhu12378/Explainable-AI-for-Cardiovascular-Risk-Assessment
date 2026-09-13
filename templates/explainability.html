@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SHAP Explainability</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f7fb;
+            margin: 0;
+        }
+
+        header {
+            background: #123b5d;
+            color: white;
+            padding: 25px 50px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 35px auto;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #123b5d;
+            color: white;
+            padding: 14px;
+            text-align: left;
+        }
+
+        td {
+            padding: 13px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .increase {
+            color: #b91c1c;
+            font-weight: bold;
+        }
+
+        .decrease {
+            color: #166534;
+            font-weight: bold;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 13px 20px;
+            background: #123b5d;
+            color: white;
+            text-decoration: none;
+            border-radius: 7px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>SHAP Explainability</h1>
+    <p>Understanding the factors contributing to the prediction</p>
+</header>
+
+<div class="container">
+
+    <div class="card">
+
+        <h2>Top Contributing Risk Factors</h2>
+
+        <p>
+            SHAP values indicate how individual features contribute
+            to the model's cardiovascular disease prediction.
+        </p>
+
+        <br>
+
+        <table>
+
+            <tr>
+                <th>Feature</th>
+                <th>SHAP Value</th>
+                <th>Impact</th>
+            </tr>
+
+            {% for item in explanation %}
+
+            <tr>
+
+                <td>
+                    {{ item.feature_name }}
+                </td>
+
+                <td>
+                    {{ "%.4f"|format(item.shap_value) }}
+                </td>
+
+                <td>
+
+                    {% if item.shap_value > 0 %}
+
+                        <span class="increase">
+                            Increases Risk
+                        </span>
+
+                    {% else %}
+
+                        <span class="decrease">
+                            Reduces Risk
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+        <a href="{{ url_for('results') }}"
+           class="btn">
+            Back to Results
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

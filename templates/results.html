@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CVD Risk Assessment Results</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #1f2937;
+        }
+
+        /* =========================
+           NAVIGATION
+        ========================= */
+
+        .navbar {
+            background: #123b5d;
+            color: white;
+            padding: 18px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h2 {
+            font-size: 21px;
+            font-weight: 600;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 25px;
+            font-size: 14px;
+        }
+
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+
+        /* =========================
+           MAIN CONTAINER
+        ========================= */
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 40px auto;
+        }
+
+        .page-title {
+            margin-bottom: 8px;
+            color: #123b5d;
+        }
+
+        .subtitle {
+            color: #64748b;
+            margin-bottom: 30px;
+        }
+
+        /* =========================
+           RESULT CARD
+        ========================= */
+
+        .result-card {
+            background: white;
+            border-radius: 14px;
+            padding: 35px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .result-box {
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .result-box h4 {
+            color: #64748b;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .result-value {
+            font-size: 30px;
+            font-weight: bold;
+            color: #123b5d;
+        }
+
+        .risk-level {
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .low {
+            color: #15803d;
+        }
+
+        .moderate {
+            color: #ca8a04;
+        }
+
+        .high {
+            color: #ea580c;
+        }
+
+        .very-high {
+            color: #dc2626;
+        }
+
+        /* =========================
+           PATIENT INFORMATION
+        ========================= */
+
+        .section {
+            background: white;
+            border-radius: 14px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+        }
+
+        .section h2 {
+            color: #123b5d;
+            margin-bottom: 20px;
+        }
+
+        .patient-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .patient-item {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .patient-item strong {
+            display: block;
+            color: #64748b;
+            font-size: 12px;
+            margin-bottom: 6px;
+        }
+
+        .patient-item span {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        /* =========================
+           DECISION SUPPORT TOOLS
+        ========================= */
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .tool-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 25px;
+            background: #ffffff;
+        }
+
+        .tool-card h3 {
+            color: #123b5d;
+            margin-bottom: 10px;
+        }
+
+        .tool-card p {
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 11px 18px;
+            border-radius: 7px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            background: #123b5d;
+            color: white;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .btn-secondary {
+            background: #475569;
+        }
+
+        .btn-success {
+            background: #15803d;
+        }
+
+        .btn-warning {
+            background: #ca8a04;
+        }
+
+        .btn-danger {
+            background: #b91c1c;
+        }
+
+        /* =========================
+           PDF
+        ========================= */
+
+        .pdf-section {
+            text-align: center;
+            background: #123b5d;
+            color: white;
+            border-radius: 14px;
+            padding: 35px;
+            margin-bottom: 30px;
+        }
+
+        .pdf-section h2 {
+            margin-bottom: 10px;
+        }
+
+        .pdf-section p {
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .pdf-button {
+            display: inline-block;
+            background: white;
+            color: #123b5d;
+            padding: 13px 25px;
+            border-radius: 7px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .pdf-button:hover {
+            background: #f1f5f9;
+        }
+
+        /* =========================
+           DISCLAIMER
+        ========================= */
+
+        .disclaimer {
+            background: #fff7ed;
+            border-left: 5px solid #f97316;
+            padding: 20px;
+            border-radius: 7px;
+            color: #7c2d12;
+            line-height: 1.6;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 900px) {
+
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .patient-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .navbar a {
+                margin-left: 10px;
+            }
+
+            .container {
+                width: 94%;
+            }
+
+            .patient-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<!-- =====================================================
+     NAVIGATION
+===================================================== -->
+
+<div class="navbar">
+
+    <h2>CVD-XAI Clinical Decision Support System</h2>
+
+    <div>
+        <a href="{{ url_for('index') }}">New Assessment</a>
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     MAIN CONTENT
+===================================================== -->
+
+<div class="container">
+
+    <h1 class="page-title">
+        Cardiovascular Risk Assessment Results
+    </h1>
+
+    <p class="subtitle">
+        Explainable AI-based cardiovascular disease risk assessment
+    </p>
+
+
+    <!-- =================================================
+         RISK RESULT
+    ================================================== -->
+
+    <div class="result-card">
+
+        <div class="result-grid">
+
+            <!-- Prediction -->
+
+            <div class="result-box">
+
+                <h4>Prediction</h4>
+
+                {% if prediction == 1 %}
+
+                    <div class="result-value">
+                        CVD Risk Detected
+                    </div>
+
+                {% else %}
+
+                    <div class="result-value">
+                        Lower CVD Risk
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- Probability -->
+
+            <div class="result-box">
+
+                <h4>Predicted Probability</h4>
+
+                <div class="result-value">
+                    {{ probability }}%
+                </div>
+
+            </div>
+
+
+            <!-- Risk Level -->
+
+            <div class="result-box">
+
+                <h4>Risk Level</h4>
+
+                <div
+                    class="risk-level
+                    {% if risk_level == 'Low' %}
+                        low
+                    {% elif risk_level == 'Moderate' %}
+                        moderate
+                    {% elif risk_level == 'High' %}
+                        high
+                    {% else %}
+                        very-high
+                    {% endif %}
+                    "
+                >
+
+                    {{ risk_level }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         PATIENT INFORMATION
+    ================================================== -->
+
+    <div class="section">
+
+        <h2>Patient Information</h2>
+
+        <div class="patient-grid">
+
+            <div class="patient-item">
+                <strong>Age</strong>
+                <span>{{ patient.age_years }} years</span>
+            </div>
+
+            <div class="patient-item">
+                <strong>Gender</strong>
+
+                <span>
+                    {% if patient.gender == 1 %}
+                        Female
+                    {% else %}
+                        Male
+                    {% endif %}
+                </span>
+
+            </div>
+
+            <div class="patient-item">
+                <strong>Height</strong>
+                <span>{{ patient.height }} cm</span>
+            </div>
+
+            <div class="patient-item">
+                <strong>Weight</strong>
+                <span>{{ patient.weight }} kg</span>
+            </div>
+
+            <div class="patient-item">
+                <strong>Systolic BP</strong>
+                <span>{{ patient.ap_hi }} mmHg</span>
+            </div>
+
+            <div class="patient-item">
+                <strong>Diastolic BP</strong>
+                <span>{{ patient.ap_lo }} mmHg</span>
+            </div>
+
+            <div class="patient-item">
+                <strong>Cholesterol</strong>
+                <span>{{ patient.cholesterol }}</span>
+            </div>
+
+            <div class="patient-item">
+                <strong>Glucose</strong>
+                <span>{{ patient.gluc }}</span>
+            </div>
+
+            <div class="patient-item">
+                <strong>Smoking</strong>
+
+                <span>
+                    {% if patient.smoke == 1 %}
+                        Yes
+                    {% else %}
+                        No
+                    {% endif %}
+                </span>
+
+            </div>
+
+            <div class="patient-item">
+                <strong>Alcohol</strong>
+
+                <span>
+                    {% if patient.alco == 1 %}
+                        Yes
+                    {% else %}
+                        No
+                    {% endif %}
+                </span>
+
+            </div>
+
+            <div class="patient-item">
+                <strong>Physical Activity</strong>
+
+                <span>
+                    {% if patient.active == 1 %}
+                        Active
+                    {% else %}
+                        Inactive
+                    {% endif %}
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         CLINICAL DECISION SUPPORT TOOLS
+    ================================================== -->
+
+    <div class="section">
+
+        <h2>Clinical Decision Support Tools</h2>
+
+        <div class="tools-grid">
+
+
+            <!-- SHAP -->
+
+            <div class="tool-card">
+
+                <h3>Explainable AI / SHAP</h3>
+
+                <p>
+                    View the most important factors influencing this
+                    patient's cardiovascular disease prediction.
+                </p>
+
+                <a
+                    href="{{ url_for('explainability') }}"
+                    class="btn"
+                >
+                    View SHAP Explanation
+                </a>
+
+            </div>
+
+
+            <!-- WHAT IF -->
+
+            <div class="tool-card">
+
+                <h3>What-If Analysis</h3>
+
+                <p>
+                    Modify blood pressure, weight, smoking and physical
+                    activity to investigate how changes may affect the
+                    predicted cardiovascular risk.
+                </p>
+
+                <a
+                    href="{{ url_for('what_if') }}"
+                    class="btn btn-warning"
+                >
+                    Open What-If Analysis
+                </a>
+
+            </div>
+
+
+            <!-- RECOMMENDATIONS -->
+
+            <div class="tool-card">
+
+                <h3>Preventive Recommendations</h3>
+
+                <p>
+                    View personalised preventive considerations based
+                    on the patient's cardiovascular risk factors.
+                </p>
+
+                <a
+                    href="{{ url_for('recommendations') }}"
+                    class="btn btn-success"
+                >
+                    View Recommendations
+                </a>
+
+            </div>
+
+
+            <!-- CLINICAL REPORT -->
+
+            <div class="tool-card">
+
+                <h3>Clinical Report</h3>
+
+                <p>
+                    Review a structured clinical assessment containing
+                    patient information, prediction, risk level and
+                    explainability results.
+                </p>
+
+                <a
+                    href="{{ url_for('report') }}"
+                    class="btn btn-secondary"
+                >
+                    View Clinical Report
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         PDF REPORT
+    ================================================== -->
+
+    <div class="pdf-section">
+
+        <h2>Download Clinical Assessment Report</h2>
+
+        <p>
+            Generate a PDF containing the patient's assessment,
+            cardiovascular risk prediction and SHAP explanation.
+        </p>
+
+        <a
+            href="{{ url_for('download_report') }}"
+            class="pdf-button"
+        >
+            Generate & Download PDF Report
+        </a>
+
+    </div>
+
+
+    <!-- =================================================
+         NEW ASSESSMENT
+    ================================================== -->
+
+    <div style="text-align:center; margin-bottom:30px;">
+
+        <a
+            href="{{ url_for('index') }}"
+            class="btn"
+        >
+            Start New Risk Assessment
+        </a>
+
+    </div>
+
+
+    <!-- =================================================
+         DISCLAIMER
+    ================================================== -->
+
+    <div class="disclaimer">
+
+        <strong>Clinical Disclaimer</strong>
+
+        <p style="margin-top:8px;">
+
+            This system is an experimental Explainable AI Clinical
+            Decision Support System developed for MSc dissertation
+            research. The predicted probability and risk classification
+            are generated by a machine learning model and should not be
+            interpreted as a medical diagnosis.
+
+            The system is intended to support, not replace, professional
+            clinical judgement. Healthcare professionals should consider
+            the patient's complete clinical history and appropriate
+            clinical guidelines before making decisions.
+
+        </p>
+
+    </div>
+
+</div>
+
+</body>
+</html>
